@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Management System - Book a Room</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <style>
+        .booking-section {
+            padding: 120px 0 60px;
+            background-color: #fff;
+        }
+
+        .booking-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .booking-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #4834d4;
+            box-shadow: 0 0 0 3px rgba(72, 52, 212, 0.1);
+            outline: none;
+        }
+
+        .form-group input:invalid {
+            border-color: #ff4757;
+        }
+
+        .error-message {
+            display: block;
+            color: #ff4757;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            min-height: 1.2em;
+        }
+
+        .form-group input:valid {
+            border-color: #2ecc71;
+        }
+
+        .form-group input.error {
+            border-color: #ff4757;
+            background-color: #fff8f8;
+        }
+
+        .form-group::after {
+            position: absolute;
+            right: 12px;
+            top: 40px;
+            font-family: "Font Awesome 5 Free";
+            font-weight: 900;
+            font-size: 1.2rem;
+        }
+
+        .form-group input:valid + .error-message:empty::after {
+            content: "\f00c";
+            color: #2ecc71;
+        }
+
+        .form-group input:invalid + .error-message:not(:empty)::after {
+            content: "\f00d";
+            color: #ff4757;
+        }
+
+        .room-preview {
+            grid-column: 1 / -1;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+
+        .room-preview.active {
+            display: block;
+        }
+
+        .room-preview h3 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .room-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.5rem;
+        }
+
+        .price-details {
+            text-align: right;
+            font-weight: 600;
+            color: #f2994a;
+        }
+
+        .submit-btn {
+            grid-column: 1 / -1;
+            background: linear-gradient(45deg, #f2994a, #f2c94c);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(242, 153, 74, 0.3);
+        }
+
+        .success-message {
+            color: #28a745;
+            text-align: center;
+            padding: 1rem;
+            background: #e6f4ea;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+            display: none;
+        }
+
+        .payment-section {
+            margin-top: 2rem;
+            padding: 1rem;
+        }
+
+        .price-display {
+            background: #ffffff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .price-display p {
+            margin: 0.5rem 0;
+            font-size: 1.1rem;
+            color: #2c3e50;
+        }
+
+        .total-amount {
+            font-size: 1.3rem !important;
+            color: #4834d4 !important;
+            font-weight: bold;
+        }
+
+        .payment-card {
+            background: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            padding: 2rem;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .payment-header h3 {
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .upi-id {
+            color: #666;
+            font-size: 1.1rem;
+            margin: 0.5rem 0;
+        }
+
+        .qr-container {
+            text-align: center;
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        #qrcode {
+            display: inline-block;
+            background: white;
+            padding: 1rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .amount-text {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-top: 1rem;
+        }
+
+        .payment-steps {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .payment-steps h4 {
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .payment-steps ol {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+
+        .payment-steps li {
+            color: #666;
+            margin: 0.8rem 0;
+            line-height: 1.4;
+        }
+
+        .transaction-input {
+            margin-top: 1.5rem;
+        }
+
+        .transaction-input label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .transaction-input input {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .transaction-input input:focus {
+            border-color: #4834d4;
+            outline: none;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: #4834d4;
+            color: white;
+        }
+
+        .btn-verify {
+            background: #00b894;
+            color: white;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        /* Icons styling */
+        .fas {
+            margin-right: 0.5rem;
+        }
+
+        .payment-status {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .payment-status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .qr-section {
+            text-align: center;
+            margin: 2rem 0;
+            display: none;
+        }
+
+        .qr-code {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 20px auto;
+            max-width: 250px;
+            text-align: center;
+        }
+
+        #qrcode {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+
+        #qrcode img {
+            display: block;
+            margin: 0 auto;
+        }
+
+        .payment-instructions {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+
+        .payment-instructions p {
+            margin: 10px 0;
+            color: #2c3e50;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .payment-instructions p:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #4834d4;
+        }
+
+        .verify-amount {
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        #confirmBookingBtn {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .booking-form {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        select.form-control {
+            background-color: white;
+            cursor: pointer;
+        }
+
+        select.form-control:focus {
+            border-color: #4834d4;
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(72, 52, 212, 0.2);
+        }
+
+        #totalAmount, #qrAmount {
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+        <nav>
+        <div class="logo-nav">HMS</div>
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="booking.html" class="active"><i class="fas fa-calendar-check"></i> Bookings</a></li>
+            <li><a href="customers.html"><i class="fas fa-users"></i> Customers</a></li>
+            <li><a href="employees.html"><i class="fas fa-user-tie"></i> Employees</a></li>
+            </ul>
+        </nav>
+
+    <!-- Booking Section -->
+    <section class="booking-section">
+        <div class="container">
+            <h2 class="section-title">Book Your <span>Stay</span></h2>
+            <p class="section-subtitle">Complete the form below to make your reservation</p>
+
+            <div class="booking-container">
+                <div id="successMessage" class="success-message">
+                    Booking successfully created!
+                </div>
+
+                <form id="bookingForm" class="booking-form">
+                    <!-- Customer Information -->
+                            <div class="form-group">
+                        <label>Name:</label>
+                        <input type="text" 
+                               id="customerName" 
+                               pattern="[A-Za-z\s]+" 
+                               title="Please enter only letters and spaces"
+                               required
+                               oninput="validateName(this)">
+                        <span class="error-message" id="nameError"></span>
+                            </div>
+
+                            <div class="form-group">
+                        <label for="customerEmail">Email Address *</label>
+                        <input type="email" id="customerEmail" name="customerEmail" required>
+                        </div>
+                        
+                            <div class="form-group">
+                        <label>Phone:</label>
+                        <input type="tel" 
+                               id="customerPhone" 
+                               pattern="[0-9]{10}" 
+                               maxlength="10"
+                               title="Please enter exactly 10 digits"
+                               required
+                               oninput="validatePhone(this)">
+                        <span class="error-message" id="phoneError"></span>
+                            </div>
+
+                    <!-- Room Selection -->
+                            <div class="form-group">
+                        <label>Room Type:</label>
+                        <select id="roomType" class="form-control" onchange="updatePrice()">
+                            <option value="">Select Room Type</option>
+                            <option value="Single">Single Room - ₹1000</option>
+                            <option value="Double">Double Room - ₹2000</option>
+                            <option value="Suite">Suite Room - ₹5000</option>
+                            <option value="Deluxe">Deluxe Room - ₹3500</option>
+                                </select>
+                            </div>
+                    
+                    <!-- Dates -->
+                    <div class="form-group">
+                        <label for="checkInDate">Check-in Date *</label>
+                        <input type="date" id="checkInDate" name="checkInDate" required>
+                        </div>
+                        
+                            <div class="form-group">
+                        <label for="checkOutDate">Check-out Date *</label>
+                        <input type="date" id="checkOutDate" name="checkOutDate" required>
+                            </div>
+
+                    <!-- Room Preview -->
+                    <div id="roomPreview" class="room-preview">
+                        <h3>Room Details</h3>
+                        <div class="room-details">
+                            <div id="roomInfo"></div>
+                            <div class="price-details">
+                                <div id="roomPrice"></div>
+                                <div id="totalPrice"></div>
+                            </div>
+                            </div>
+                        </div>
+                        
+                    <div class="payment-section">
+                        <div class="price-display">
+                            <p>Room Price per Night: <span id="pricePerNight">Select a room type</span></p>
+                            <p class="total-amount">Total Amount: <span id="totalAmount">-</span></p>
+                        </div>
+                        
+                        <div class="payment-buttons">
+                            <button type="button" class="btn btn-primary" id="showUpiBtn">
+                                <i class="fas fa-qrcode"></i> Pay with UPI
+                            </button>
+                        </div>
+                        
+                        <div class="qr-section" id="qrSection" style="display: none;">
+                            <div class="payment-card">
+                                <div class="payment-header">
+                                    <h3><i class="fas fa-qrcode"></i> Scan & Pay</h3>
+                                    <p class="upi-id"><i class="fas fa-mobile-alt"></i> UPI ID: tarnikhatri51@okhdfcbank</p>
+                                </div>
+
+                                <div class="qr-container">
+                                    <div id="qrcode"></div>
+                                    <p class="amount-text">Amount to Pay: <span id="qrAmount">-</span></p>
+                                </div>
+
+                                <div class="payment-steps">
+                                    <h4><i class="fas fa-info-circle"></i> Payment Steps:</h4>
+                                    <ol>
+                                        <li>Open your UPI app (Google Pay, PhonePe, Paytm)</li>
+                                        <li>Scan the QR code above</li>
+                                        <li>Verify the amount and UPI ID</li>
+                                        <li>Complete the payment</li>
+                                        <li>Enter the Transaction ID below</li>
+                                    </ol>
+                                </div>
+
+                                <div class="transaction-input">
+                                    <label><i class="fas fa-receipt"></i> UPI Transaction ID:</label>
+                                    <input type="text" id="upiTransactionId" required 
+                                           placeholder="Enter the UPI transaction ID after payment">
+                                    <button type="button" class="btn btn-verify" id="verifyPaymentBtn">
+                                        <i class="fas fa-check-circle"></i> Verify Payment
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="payment-status" id="paymentStatus"></div>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="confirmBookingBtn">
+                        Confirm Booking
+                    </button>
+                    </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About Us</h3>
+                    <p>We provide exceptional hospitality services with a focus on customer satisfaction and comfort.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p><i class="fas fa-phone"></i> 8888888888</p>
+                    <p><i class="fas fa-envelope"></i> info@serenityresort.com</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-links">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Get form elements
+        const bookingForm = document.getElementById('bookingForm');
+        const roomTypeSelect = document.getElementById('roomType');
+        const checkInDate = document.getElementById('checkInDate');
+        const checkOutDate = document.getElementById('checkOutDate');
+        const roomPreview = document.getElementById('roomPreview');
+        const roomInfo = document.getElementById('roomInfo');
+        const roomPrice = document.getElementById('roomPrice');
+        const totalPrice = document.getElementById('totalPrice');
+        const successMessage = document.getElementById('successMessage');
+        const totalAmount = document.getElementById('totalAmount');
+        const qrAmount = document.getElementById('qrAmount');
+        const paymentStatus = document.getElementById('paymentStatus');
+        const confirmBookingBtn = document.getElementById('confirmBookingBtn');
+
+        // Room prices object
+        const roomPrices = {
+            'Single': 1000,
+            'Double': 2000,
+            'Suite': 5000,
+            'Deluxe': 3500
+        };
+
+        // Function to update price when room type changes
+        function updatePrice() {
+            const selectedRoom = document.getElementById('roomType').value;
+            const priceDisplay = selectedRoom ? `₹${roomPrices[selectedRoom]}` : 'Select a room type';
+            document.getElementById('pricePerNight').textContent = priceDisplay;
+            updateTotalAmount();
+        }
+
+        // Function to update total amount
+        function updateTotalAmount() {
+            const checkIn = new Date(document.getElementById('checkInDate').value);
+            const checkOut = new Date(document.getElementById('checkOutDate').value);
+            const selectedRoom = document.getElementById('roomType').value;
+            const pricePerNight = roomPrices[selectedRoom] || 0;
+            
+            // Check if all required values are present
+            if (checkIn && checkOut && selectedRoom) {
+                const nights = Math.ceil((checkOut - checkIn) / (1000 * 60 * 60 * 24));
+                const totalAmount = nights * pricePerNight;
+                document.getElementById('totalAmount').textContent = `₹${totalAmount}`;
+                document.getElementById('qrAmount').textContent = `₹${totalAmount}`;
+            } else {
+                // If any value is missing, show dash
+                document.getElementById('totalAmount').textContent = '-';
+                document.getElementById('qrAmount').textContent = '-';
+            }
+        }
+
+        // Initialize form with URL parameters if they exist
+        const urlParams = new URLSearchParams(window.location.search);
+        const roomType = urlParams.get('type');
+        if (roomType) {
+            document.getElementById('roomType').value = roomType;
+            updatePrice();
+        }
+
+        // Event listeners for date changes
+        document.getElementById('checkInDate').addEventListener('change', updateTotalAmount);
+        document.getElementById('checkOutDate').addEventListener('change', updateTotalAmount);
+
+        // Set minimum date for check-in and check-out
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('checkInDate').min = today;
+        document.getElementById('checkOutDate').min = today;
+
+        // Validate check-out date is after check-in date
+        document.getElementById('checkInDate').addEventListener('change', function() {
+            document.getElementById('checkOutDate').min = this.value;
+            updateTotalAmount();
+        });
+
+        // Generate QR code with updated amount
+        function generateQRCode() {
+            // Clear previous QR code
+            const qrcodeDiv = document.getElementById('qrcode');
+            qrcodeDiv.innerHTML = '';
+            
+            const selectedRoom = document.getElementById('roomType').value;
+            const amount = document.getElementById('totalAmount').textContent.replace('₹', '').trim();
+            
+            if (amount === '-' || !amount) {
+                alert('Please select room type and dates first');
+                return false;
+            }
+
+            const upiId = "tarnikhatri51@okhdfcbank";
+            const name = "SerenityResort";
+            const note = `Room Booking - ${selectedRoom}`;
+            
+            // Create UPI URL
+            const upiUrl = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(name)}&am=${amount}&cu=INR&tn=${encodeURIComponent(note)}`;
+            
+            // Generate QR code
+            try {
+                new QRCode(qrcodeDiv, {
+                    text: upiUrl,
+                    width: 200,
+                    height: 200,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                return true;
+            } catch (error) {
+                console.error('QR Code generation failed:', error);
+                alert('Failed to generate QR code. Please try again.');
+                return false;
+            }
+        }
+
+        // Show UPI payment section
+        document.getElementById('showUpiBtn').addEventListener('click', function() {
+            if (generateQRCode()) {
+                document.getElementById('qrSection').style.display = 'block';
+                this.style.display = 'none';
+            }
+        });
+
+        // Verify payment and show confirmation button
+        document.getElementById('verifyPaymentBtn').addEventListener('click', function() {
+            const transactionId = document.getElementById('upiTransactionId').value.trim();
+            if (!transactionId) {
+                alert('Please enter the UPI transaction ID');
+                return;
+            }
+            // Show success message and enable booking confirmation
+            alert('Payment verified successfully!');
+            document.getElementById('confirmBookingBtn').style.display = 'block';
+        });
+
+        // Handle form submission
+        bookingForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = {
+                customerName: document.getElementById('customerName').value,
+                customerEmail: document.getElementById('customerEmail').value,
+                customerPhone: document.getElementById('customerPhone').value,
+                roomType: roomTypeSelect.value,
+                checkInDate: checkInDate.value,
+                checkOutDate: checkOutDate.value,
+                amount: totalAmount.textContent.replace('₹', ''),
+                transactionId: document.getElementById('upiTransactionId').value
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/api/bookings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                if (!response.ok) {
+                    throw new Error('Booking failed');
+                }
+
+                // Show success message
+                successMessage.style.display = 'block';
+                bookingForm.reset();
+                roomPreview.classList.remove('active');
+
+                // Hide success message after 3 seconds
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to create booking. Please try again.');
+            }
+        });
+
+        // Add scroll effect to navigation
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+                    } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        // Name validation
+        function validateName(input) {
+            const nameRegex = /^[A-Za-z\s]+$/;
+            const errorElement = document.getElementById('nameError');
+            const value = input.value.trim();
+
+            if (value === '') {
+                errorElement.textContent = 'Name is required';
+                input.setCustomValidity('Name is required');
+            } else if (!nameRegex.test(value)) {
+                errorElement.textContent = 'Name should contain only letters and spaces';
+                input.setCustomValidity('Name should contain only letters and spaces');
+            } else if (value.length < 2) {
+                errorElement.textContent = 'Name should be at least 2 characters long';
+                input.setCustomValidity('Name should be at least 2 characters long');
+            } else {
+                errorElement.textContent = '';
+                input.setCustomValidity('');
+            }
+        }
+
+        // Phone validation
+        function validatePhone(input) {
+            const phoneRegex = /^[0-9]{10}$/;
+            const errorElement = document.getElementById('phoneError');
+            const value = input.value.trim();
+
+            // Remove any non-digit characters
+            input.value = value.replace(/\D/g, '');
+
+            if (value === '') {
+                errorElement.textContent = 'Phone number is required';
+                input.setCustomValidity('Phone number is required');
+            } else if (!phoneRegex.test(value)) {
+                errorElement.textContent = 'Phone number must be exactly 10 digits';
+                input.setCustomValidity('Phone number must be exactly 10 digits');
+            } else {
+                errorElement.textContent = '';
+                input.setCustomValidity('');
+            }
+        }
+
+        // Add form submission validation
+        document.getElementById('bookingForm').addEventListener('submit', function(event) {
+            const name = document.getElementById('customerName');
+            const phone = document.getElementById('customerPhone');
+            
+            validateName(name);
+            validatePhone(phone);
+
+            if (!name.checkValidity() || !phone.checkValidity()) {
+                event.preventDefault();
+            }
+        });
+
+        // Add event listeners for real-time validation
+        document.addEventListener('DOMContentLoaded', function() {
+            const nameInput = document.getElementById('customerName');
+            const phoneInput = document.getElementById('customerPhone');
+
+            // Real-time name validation
+            nameInput.addEventListener('input', function() {
+                validateName(this);
+                updateFormValidity();
+            });
+
+            // Real-time phone validation
+            phoneInput.addEventListener('input', function() {
+                validatePhone(this);
+                updateFormValidity();
+            });
+
+            // Update form validity status
+            function updateFormValidity() {
+                const submitButton = document.getElementById('showUpiBtn');
+                if (nameInput.checkValidity() && phoneInput.checkValidity()) {
+                    submitButton.disabled = false;
+                    submitButton.classList.remove('disabled');
+                } else {
+                    submitButton.disabled = true;
+                    submitButton.classList.add('disabled');
+                }
+            }
+
+            // Initial validation check
+            updateFormValidity();
+        });
+
+        // Format phone number as user types
+        document.getElementById('customerPhone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 10) {
+                value = value.slice(0, 10);
+            }
+            e.target.value = value;
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Management System - Customers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Header/Navigation Styles */
+        nav {
+            background: rgba(0, 0, 0, 0.8);
+            padding: 1rem 5%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-nav {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #f2994a;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            padding: 100px 5% 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        /* Table Styles */
+        .table-container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            margin-top: 2rem;
+        }
+
+        .customers-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        .customers-table th {
+            background: #f2994a;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .customers-table td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+        }
+
+        .customers-table tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .customers-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Contact Info Styles */
+        .contact-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            color: #555;
+        }
+
+        .contact-info:last-child {
+            margin-bottom: 0;
+        }
+
+        .contact-info i {
+            color: #f2994a;
+            width: 20px;
+        }
+
+        /* Booking Status Styles */
+        .booking-status {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .booking-active {
+            background-color: #e6f4ea;
+            color: #1e7e34;
+        }
+
+        .booking-past {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .booking-none {
+            background-color: #f8f9fa;
+            color: #6c757d;
+        }
+
+        /* Error Message Styles */
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1024px) {
+            .main-content {
+                padding: 80px 2% 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .customers-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            nav ul {
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .page-title {
+                font-size: 1.5rem;
+            }
+
+            .booking-status {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.8rem;
+            }
+        }
+
+        .search-container {
+            margin: 2rem 0;
+            display: flex;
+            justify-content: center;
+        }
+
+        .search-box {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #666;
+        }
+
+        #customerSearch {
+            width: 100%;
+            padding: 12px 20px 12px 45px;
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        #customerSearch:focus {
+            outline: none;
+            border-color: #f2994a;
+            box-shadow: 0 0 0 3px rgba(242, 153, 74, 0.1);
+        }
+
+        /* Add animation for search results */
+        .customers-table tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        .hide-row {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+        <nav>
+        <div class="logo-nav">HMS</div>
+        <ul>
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="booking.html"><i class="fas fa-calendar-check"></i> Bookings</a></li>
+            <li><a href="customers.html" class="active"><i class="fas fa-users"></i> Customers</a></li>
+            <li><a href="employees.html"><i class="fas fa-user-tie"></i> Employees</a></li>
+            </ul>
+        </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">Customer Management</h1>
+            <p class="page-subtitle">View and manage customer information and bookings</p>
+        </div>
+
+        <div class="search-container">
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="customerSearch" placeholder="Search by name, email, or phone number...">
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table class="customers-table">
+                <thead>
+                    <tr>
+                        <th>Customer Name</th>
+                        <th>Contact Information</th>
+                        <th>Current Booking</th>
+                        <th>Check-in Date</th>
+                        <th>Check-out Date</th>
+                    </tr>
+                </thead>
+                <tbody id="customersTableBody">
+                    <!-- Data will be inserted here -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <script>
+        async function fetchCustomers() {
+            try {
+                const response = await fetch('http://localhost:3000/api/customers');
+                if (!response.ok) throw new Error('Failed to fetch');
+                const customers = await response.json();
+                displayCustomers(customers);
+                // Store customers data for search functionality
+                window.customersData = customers;
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('customersTableBody').innerHTML = `
+                    <tr>
+                        <td colspan="5">
+                            <div class="error-message">
+                                <i class="fas fa-exclamation-circle"></i>
+                                Failed to load customers. Please try again.
+                            </div>
+                        </td>
+                    </tr>`;
+            }
+        }
+
+        function displayCustomers(customers) {
+            const tbody = document.getElementById('customersTableBody');
+            tbody.innerHTML = customers.map(customer => {
+                const bookingStatusClass = customer.booking ? 
+                    (customer.booking.status === 'Active' ? 'booking-active' : 'booking-past') : 
+                    'booking-none';
+                
+            return `
+                    <tr class="customer-row">
+                        <td>${customer.name}</td>
+                        <td>
+                            <div class="contact-info">
+                                <i class="fas fa-envelope"></i>
+                                ${customer.contactInfo.email}
+                            </div>
+                            <div class="contact-info">
+                                <i class="fas fa-phone"></i>
+                                ${customer.contactInfo.phone}
+                            </div>
+                        </td>
+                        <td>
+                            <span class="booking-status ${bookingStatusClass}">
+                                ${customer.booking ? customer.booking.roomInfo : 'No Booking'}
+                            </span>
+                        </td>
+                        <td>${customer.booking ? customer.booking.checkIn : '-'}</td>
+                        <td>${customer.booking ? customer.booking.checkOut : '-'}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // Search functionality
+        function searchCustomers(searchTerm) {
+            const rows = document.querySelectorAll('.customer-row');
+            const searchTermLower = searchTerm.toLowerCase();
+
+            rows.forEach(row => {
+                const name = row.children[0].textContent.toLowerCase();
+                const email = row.children[1].textContent.toLowerCase();
+                const phone = row.children[1].textContent.toLowerCase();
+
+                if (name.includes(searchTermLower) || 
+                    email.includes(searchTermLower) || 
+                    phone.includes(searchTermLower)) {
+                    row.classList.remove('hide-row');
+                } else {
+                    row.classList.add('hide-row');
+                }
+            });
+
+            // Show no results message if all rows are hidden
+            const visibleRows = document.querySelectorAll('.customer-row:not(.hide-row)').length;
+            const tbody = document.getElementById('customersTableBody');
+            
+            if (visibleRows === 0) {
+                const noResultsRow = `
+                    <tr class="no-results">
+                        <td colspan="5">
+                            <div class="no-results-message">
+                                <i class="fas fa-search"></i>
+                                No customers found matching "${searchTerm}"
+                            </div>
+                        </td>
+                    </tr>`;
+                
+                tbody.insertAdjacentHTML('beforeend', noResultsRow);
+            } else {
+                const noResultsRow = document.querySelector('.no-results');
+                if (noResultsRow) noResultsRow.remove();
+            }
+        }
+
+        // Add event listener for search input
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchCustomers();
+            
+            const searchInput = document.getElementById('customerSearch');
+            let debounceTimer;
+
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    searchCustomers(e.target.value);
+                }, 300); // Debounce for better performance
+            });
+        });
+    </script>
+</body>
+</html> 

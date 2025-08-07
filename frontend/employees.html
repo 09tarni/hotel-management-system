@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hotel Management System - Employees</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .employees-section {
+            padding: 120px 0 60px;
+            background-color: #f8f9fa;
+        }
+        
+        .employees-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+        
+        .employee-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .employee-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .employee-info h3 {
+            color: #333;
+            font-size: 1.4rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .employee-info .role {
+            color: #f2994a;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        
+        .employee-info .shift {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .employee-info .salary {
+            color: #2d3436;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: 1rem;
+        }
+
+        .error-message {
+            text-align: center;
+            color: #e74c3c;
+            padding: 2rem;
+            font-size: 1.1rem;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin: 2rem auto;
+            max-width: 600px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 1rem;
+        }
+
+        .section-title span {
+            color: #f2994a;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo-nav">HMS</div>
+        <ul>
+            <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="booking.html"><i class="fas fa-calendar-check"></i> Bookings</a></li>
+            <li><a href="customers.html"><i class="fas fa-users"></i> Customers</a></li>
+            <li><a href="employees.html" class="active"><i class="fas fa-user-tie"></i> Employees</a></li>
+        </ul>
+    </nav>
+
+    <!-- Employees Section -->
+    <section class="employees-section">
+        <div class="container">
+            <h2 class="section-title">Our <span>Team</span></h2>
+            <p class="section-subtitle">Meet our dedicated staff members who make your stay exceptional</p>
+            
+            <div class="employees-grid" id="employeesGrid">
+                <!-- Employee cards will be dynamically inserted here -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About Us</h3>
+                    <p>We provide exceptional hospitality services with a focus on customer satisfaction and comfort.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p><i class="fas fa-phone"></i> 8888888888</p>
+                    <p><i class="fas fa-envelope"></i> info@serenityresort.com</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-links">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Function to fetch employees from the server
+        async function fetchEmployees() {
+            try {
+                const response = await fetch('http://localhost:3000/api/employees');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const employees = await response.json();
+                displayEmployees(employees);
+            } catch (error) {
+                console.error('Error fetching employees:', error);
+                document.getElementById('employeesGrid').innerHTML = 
+                    '<p class="error-message">Error loading employees. Please try again later.</p>';
+            }
+        }
+
+        // Function to display employees in the grid
+        function displayEmployees(employees) {
+            const grid = document.getElementById('employeesGrid');
+            grid.innerHTML = employees.map(employee => `
+                <div class="employee-card">
+                    <div class="employee-info">
+                        <h3>${employee.E_Name}</h3>
+                        <span class="role">${employee.Role_Name || 'Unassigned'}</span>
+                        <span class="shift">${employee.Shift_Timing || 'Standard'} Shift</span>
+                        <div class="salary">Salary: ₹${(employee.Salary || 0).toLocaleString()}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Load employees when the page loads
+        document.addEventListener('DOMContentLoaded', fetchEmployees);
+
+        // Add scroll effect to navigation
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html> 

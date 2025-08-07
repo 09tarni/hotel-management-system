@@ -1,0 +1,322 @@
+/* Booking Page Specific Styles */
+.booking-header {
+    height: 40vh;
+    min-height: 300px;
+    background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80') no-repeat center center;
+    background-size: cover;
+    position: relative;
+}
+
+.booking-header::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to top, #f9f9f9, transparent);
+}
+
+.booking-hero-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+}
+
+.booking-hero-content h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    animation: fadeInDown 1s ease;
+}
+
+.booking-hero-content p {
+    font-size: 1.3rem;
+    font-weight: 300;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    animation: fadeInUp 1s ease;
+}
+
+.booking-form {
+    padding: 5rem 0;
+    background-color: #f9f9f9;
+    position: relative;
+}
+
+.booking-form::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to bottom, #f9f9f9, transparent);
+}
+
+.booking-container {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+.booking-main {
+    background: white;
+    padding: 3rem;
+    border-radius: 20px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    transform: translateY(0);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.booking-main:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+}
+
+.booking-main h2 {
+    font-size: 2.2rem;
+    margin-bottom: 2rem;
+    color: #333;
+    text-align: center;
+    position: relative;
+    padding-bottom: 1.5rem;
+}
+
+.booking-main h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 4px;
+    background: linear-gradient(45deg, #f2c94c, #f2994a);
+    border-radius: 2px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.8rem;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.8rem;
+    color: #333;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: color 0.3s ease;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 1.2rem;
+    border: 2px solid #eee;
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background-color: #f9f9f9;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    border-color: #f2c94c;
+    box-shadow: 0 0 0 4px rgba(242, 201, 76, 0.2);
+    outline: none;
+    background-color: white;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #999;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 2.5rem 0;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.checkbox-group:hover {
+    background-color: #f5f5f5;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #f2c94c;
+    cursor: pointer;
+}
+
+.checkbox-group span {
+    font-size: 0.95rem;
+    color: #666;
+    flex: 1;
+}
+
+.total-cost {
+    margin: 2.5rem 0;
+    padding: 2rem;
+    background: linear-gradient(45deg, #f2c94c, #f2994a);
+    color: white;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 10px 20px rgba(242, 201, 76, 0.3);
+    transform: scale(1);
+    transition: transform 0.3s ease;
+}
+
+.total-cost:hover {
+    transform: scale(1.02);
+}
+
+.total-cost h3 {
+    margin: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.total-cost span {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-left: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn-submit {
+    width: 100%;
+    padding: 1.3rem;
+    background: linear-gradient(45deg, #f2c94c, #f2994a);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 20px rgba(242, 201, 76, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-submit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #f2994a, #f2c94c);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.btn-submit:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(242, 201, 76, 0.4);
+}
+
+.btn-submit:hover::before {
+    opacity: 1;
+}
+
+.btn-submit span {
+    position: relative;
+    z-index: 1;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .booking-main {
+        padding: 2rem;
+    }
+    
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .total-cost h3 {
+        font-size: 1.2rem;
+    }
+    
+    .total-cost span {
+        font-size: 2rem;
+    }
+    
+    .booking-hero-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .booking-hero-content p {
+        font-size: 1.1rem;
+    }
+}
+
+/* Single Room */
+.single-room-bg {
+    background: url('/api/placeholder/350/250') no-repeat center center !important;
+    background-size: cover !important;
+}
+
+/* Double Room */
+.double-room-bg {
+    background: url('/api/placeholder/351/250') no-repeat center center !important;
+    background-size: cover !important;
+}
+
+/* Suite Room */
+.suite-room-bg {
+    background: url('/api/placeholder/352/250') no-repeat center center !important;
+    background-size: cover !important;
+}

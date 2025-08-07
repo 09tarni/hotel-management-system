@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serenity Resort - Luxury Hotel Booking</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .cards-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* Show 3 cards per row */
+            gap: 2rem;
+            padding: 2rem 0;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .room-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .room-image {
+            height: 250px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .room-details {
+            padding: 1.5rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .room-type {
+            font-size: 1.1rem;
+            color: #f2994a;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .room-features {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .room-features span {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .room-price {
+            margin: 1rem 0;
+            font-size: 1.1rem;
+        }
+
+        .room-price .price {
+            color: #f2994a;
+            font-weight: 600;
+            font-size: 1.3rem;
+        }
+
+        .room-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Responsive design */
+        @media (max-width: 1200px) {
+            .cards-container {
+                grid-template-columns: repeat(2, 1fr); /* 2 cards per row on medium screens */
+                padding: 2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cards-container {
+                grid-template-columns: 1fr; /* 1 card per row on mobile */
+                padding: 1rem;
+            }
+        }
+
+        /* Container for the entire section */
+        .room-cards {
+            padding: 4rem 0;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <nav>
+            <div class="logo-nav">SERENITY</div>
+            <ul>
+                <li><a href="#home" class="nav-link"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#rooms" class="nav-link"><i class="fas fa-hotel"></i> Rooms</a></li>
+                <li><a href="#services" class="nav-link"><i class="fas fa-concierge-bell"></i> Services</a></li>
+                <li><a href="#gallery" class="nav-link"><i class="fas fa-images"></i> Gallery</a></li>
+                <li><a href="#about" class="nav-link"><i class="fas fa-info-circle"></i> About</a></li>
+                <li><a href="#contact" class="nav-link"><i class="fas fa-phone"></i> Contact</a></li>
+                <li><a href="employees.html" class="nav-link"><i class="fas fa-user-tie"></i> Employees</a></li>
+            </ul>
+        </nav>
+        <div class="hero-content">
+            <h1 class="logo">SERENITY RESORT</h1>
+            <p class="tagline">Experience luxury like never before</p>
+            <a href="#rooms" class="btn-hero">Explore Rooms</a>
+        </div>
+    </header>
+
+    <!-- Room Cards Section -->
+    <section id="rooms" class="room-cards">
+        <div class="container">
+            <h2 class="section-title">Our <span>Luxury</span> Accommodations</h2>
+            <p class="section-subtitle">Choose the perfect space for your stay</p>
+            
+            <div class="cards-container">
+                <!-- Single Room Card -->
+                <div class="room-card">
+                    <div class="room-image single-room" style="background-image: url('https://victoriahotel.co.uk/sites/default/files/2022-09/bc-victoria-accom_standard-single-room-301-at-victoria-hotel.jpg');">
+                        <div class="room-tag">Most Popular</div>
+                    </div>
+                    <div class="room-details">
+                        <div class="room-type">Single Room</div>
+                        <h3>Comfort Suite</h3>
+                        <div class="room-features">
+                            <span><i class="fas fa-user"></i> 1 Guest</span>
+                            <span><i class="fas fa-bed"></i> Queen Bed</span>
+                            <span><i class="fas fa-vector-square"></i> 28m²</span>
+                        </div>
+                        <p class="room-desc">Perfect for solo travelers seeking comfort and convenience with all essential amenities.</p>
+                        <div class="room-price">
+                            <span class="price">₹1,000</span> per night
+                        </div>
+                        <div class="room-buttons">
+                            <button class="btn-view-details" onclick="scrollToFacilities()">View Details</button>
+                            <button class="btn-book" onclick="window.location.href='booking.html?type=' + encodeURIComponent('Single Room') + '&price=' + encodeURIComponent('1000')">Book Room</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Double Room Card -->
+                <div class="room-card">
+                    <div class="room-image double-room" style="background-image: url('https://tse3.mm.bing.net/th/id/OIP.PncJUX1FujH1T_hxibwDdAHaEy?rs=1&pid=ImgDetMain');">
+                        <div class="room-tag">Bestseller</div>
+                    </div>
+                    <div class="room-details">
+                        <div class="room-type">Double Room</div>
+                        <h3>Deluxe Haven</h3>
+                        <div class="room-features">
+                            <span><i class="fas fa-user"></i> 2 Guests</span>
+                            <span><i class="fas fa-bed"></i> King Bed</span>
+                            <span><i class="fas fa-vector-square"></i> 40m²</span>
+                        </div>
+                        <p class="room-desc">Spacious accommodation for couples with premium amenities and scenic views.</p>
+                        <div class="room-price">
+                            <span class="price">₹2,000</span> per night
+                        </div>
+                        <div class="room-buttons">
+                            <button class="btn-view-details" onclick="scrollToFacilities()">View Details</button>
+                            <button class="btn-book" onclick="window.location.href='booking.html?type=' + encodeURIComponent('Double Room') + '&price=' + encodeURIComponent('2000')">Book Room</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Suite Room Card -->
+                <div class="room-card">
+                    <div class="room-image suite-room" style="background-image: url('https://photos.mandarinoriental.com/is/image/MandarinOriental/dmo-The-worlds-most-romantic-hotel-suites-dubai-royal-penthouse-bedroom');">
+                        <div class="room-tag">Luxury</div>
+                    </div>
+                    <div class="room-details">
+                        <div class="room-type">Luxury Suite</div>
+                        <h3>Royal Panorama</h3>
+                        <div class="room-features">
+                            <span><i class="fas fa-user"></i> 4 Guests</span>
+                            <span><i class="fas fa-bed"></i> King + Sofa</span>
+                            <span><i class="fas fa-vector-square"></i> 75m²</span>
+                        </div>
+                        <p class="room-desc">Ultimate luxury experience with separate living area, panoramic views and exclusive services.</p>
+                        <div class="room-price">
+                            <span class="price">₹5,000</span> per night
+                        </div>
+                        <div class="room-buttons">
+                            <button class="btn-view-details" onclick="scrollToFacilities()">View Details</button>
+                            <button class="btn-book" onclick="window.location.href='booking.html?type=' + encodeURIComponent('Luxury Suite') + '&price=' + encodeURIComponent('5000')">Book Room</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deluxe Room Card -->
+                <div class="room-card">
+                    <div class="room-image deluxe-room" style="background-image: url('https://tse4.mm.bing.net/th/id/OIP.tyjyH3xb8lYrSVroz1lVhQHaDt?rs=1&pid=ImgDetMain');">
+                        <div class="room-tag">Deluxe</div>
+                    </div>
+                    <div class="room-details">
+                        <div class="room-type">Deluxe Room</div>
+                        <h3>Executive Suite</h3>
+                        <div class="room-features">
+                            <span><i class="fas fa-user"></i> 2 Guests</span>
+                            <span><i class="fas fa-bed"></i> King Bed</span>
+                            <span><i class="fas fa-vector-square"></i> 40m²</span>
+                        </div>
+                        <p class="room-desc">Spacious accommodation for couples with premium amenities and scenic views.</p>
+                        <div class="room-price">
+                            <span class="price">₹3,500</span> per night
+                        </div>
+                        <div class="room-buttons">
+                            <button class="btn-view-details" onclick="scrollToFacilities()">View Details</button>
+                            <button class="btn-book" onclick="window.location.href='booking.html?type=' + encodeURIComponent('Deluxe Room') + '&price=' + encodeURIComponent('3500')">Book Room</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Hotel Facilities Section -->
+    <section class="facilities">
+        <div class="container">
+            <h2 class="section-title">Premium <span>Facilities</span></h2>
+            <p class="section-subtitle">Enhancing your stay experience</p>
+            
+            <div class="facilities-grid">
+                <div class="facility">
+                    <div class="facility-icon">
+                        <i class="fas fa-swimming-pool"></i>
+                    </div>
+                    <h3>Infinity Pool</h3>
+                    <p>Enjoy our rooftop infinity pool with panoramic ocean views</p>
+                </div>
+                <div class="facility">
+                    <div class="facility-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <h3>Gourmet Restaurant</h3>
+                    <p>Award-winning cuisine from international chefs</p>
+                </div>
+                <div class="facility">
+                    <div class="facility-icon">
+                        <i class="fas fa-spa"></i>
+                    </div>
+                    <h3>Luxury Spa</h3>
+                    <p>Rejuvenating treatments and traditional massages</p>
+                </div>
+                <div class="facility">
+                    <div class="facility-icon">
+                        <i class="fas fa-dumbbell"></i>
+                    </div>
+                    <h3>Fitness Center</h3>
+                    <p>State-of-the-art equipment and personal trainers</p>
+                </div>
+                <div class="facility">
+                    <div class="facility-icon">
+                        <i class="fas fa-cocktail"></i>
+                    </div>
+                    <h3>Skyline Bar</h3>
+                    <p>Craft cocktails with breathtaking sunset views</p>
+                </div>
+                <div class="facility">
+                    <div class="facility-icon">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <h3>High-Speed WiFi</h3>
+                    <p>Complimentary throughout the entire property</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="cta">
+        <div class="container">
+            <h2>Experience Luxury Like Never Before</h2>
+            <p>Book your stay now and receive a complimentary spa treatment</p>
+            <a href="booking.html" class="btn-cta">Reserve Now</a>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title">Our <span>Services</span></h2>
+            <p class="section-subtitle">Experience luxury at its finest</p>
+            
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-concierge-bell"></i>
+                    </div>
+                    <h3>24/7 Concierge</h3>
+                    <p>Personalized assistance for all your needs</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-car"></i>
+                    </div>
+                    <h3>Airport Transfer</h3>
+                    <p>Complimentary luxury transportation</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-umbrella-beach"></i>
+                    </div>
+                    <h3>Beach Access</h3>
+                    <p>Private beach with premium amenities</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <h3>Room Service</h3>
+                    <p>24-hour gourmet dining in your room</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Section -->
+    <section id="gallery" class="gallery">
+        <div class="container">
+            <h2 class="section-title">Our <span>Gallery</span></h2>
+            <p class="section-subtitle">A glimpse of luxury and comfort</p>
+            
+            <div class="gallery-grid">
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Lobby">
+                    <div class="gallery-overlay">
+                        <h3>Grand Lobby</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1575429198097-0414ec08e8cd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Pool">
+                    <div class="gallery-overlay">
+                        <h3>Infinity Pool</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Restaurant">
+                    <div class="gallery-overlay">
+                        <h3>Fine Dining</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1544161515-4ab6ce6db874?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Spa">
+                    <div class="gallery-overlay">
+                        <h3>Luxury Spa</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Beach">
+                    <div class="gallery-overlay">
+                        <h3>Private Beach</h3>
+                    </div>
+                </div>
+                <div class="gallery-item">
+                    <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Room">
+                    <div class="gallery-overlay">
+                        <h3>Luxury Suite</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">About <span>Us</span></h2>
+            <p class="section-subtitle">Your perfect getaway destination</p>
+            
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Welcome to Serenity Resort</h3>
+                    <p>Nestled in the heart of paradise, Serenity Resort offers an unparalleled luxury experience. Our commitment to excellence and attention to detail ensures that every moment of your stay is perfect.</p>
+                    <p>With world-class amenities, exceptional service, and breathtaking views, we create unforgettable memories for our guests.</p>
+                </div>
+                <div class="about-image">
+                    <img src="https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80" alt="Resort View">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Contact <span>Us</span></h2>
+            <p class="section-subtitle">Get in touch with our team</p>
+            
+            <div class="contact-container">
+                <div class="contact-info">
+                    <div class="info-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3>Address</h3>
+                        <p>32-c <br>krishna nagar,Mathura</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-phone"></i>
+                        <h3>Phone</h3>
+                        <p>+91 8888888888</p>
+                    </div>
+                    <div class="info-item">
+                        <i class="fas fa-envelope"></i>
+                        <h3>Email</h3>
+                        <p>info@serenityresort.com</p>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form>
+                        <div class="form-group">
+                            <input type="text" placeholder="Your Name" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="email" placeholder="Your Email" required>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" placeholder="Subject">
+                        </div>
+                        <div class="form-group">
+                            <textarea placeholder="Your Message" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-submit">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Serenity Resort</h3>
+                    <p><i class="fas fa-map-marker-alt"></i> 32-c <br>Krishna nagar,Mathura</p>
+                    <p><i class="fas fa-phone"></i>+91 8888888888</p>
+                    <p><i class="fas fa-envelope"></i> info@serenityresort.com</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Rooms</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Services</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Gallery</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-links">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-pinterest-p"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Newsletter</h3>
+                    <p>Subscribe to receive special offers and updates</p>
+                    <form class="newsletter-form">
+                        <input type="email" placeholder="Your Email Address">
+                        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Serenity Resort. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms & Conditions</a>
+                    <div class="footer-buttons">
+                        <a href="booking.html" class="btn"><i class="fas fa-calendar-check"></i> Make a Booking</a>
+                        <a href="customers.html" class="btn"><i class="fas fa-users"></i> View Customers</a>
+                        <a href="employees.html" class="btn"><i class="fas fa-user-tie"></i> View Employees</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- First, make sure these elements exist in your HTML -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closePaymentModal()">&times;</span>
+            <h2>Room Payment</h2>
+            <form id="paymentForm" onsubmit="handlePaymentSubmit(event)">
+                <div class="form-group">
+                    <label>Name:</label>
+                    <input type="text" id="customerName" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Room Type:</label>
+                    <input type="text" id="roomType" readonly>
+                </div>
+
+                <div class="form-group">
+                    <label>Amount:</label>
+                    <input type="text" id="amount" readonly>
+                </div>
+
+                <div class="payment-steps">
+                    <div class="step">
+                        <h3>Step 1: Make Payment via UPI</h3>
+                        <a id="upiLink" href="#" target="_blank" class="upi-button">
+                            <i class="fas fa-qrcode"></i> Pay with UPI
+                        </a>
+            </div>
+
+                    <div class="step">
+                        <h3>Step 2: Enter UPI Transaction ID</h3>
+                        <input type="text" id="upiTransactionId" required placeholder="Enter UPI Transaction ID">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">Confirm Booking</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Smooth scrolling for navigation links
+        
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Add navigation scroll effect
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+
+        function scrollToFacilities() {
+            document.querySelector('.facilities').scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        function showPaymentModal(roomType, amount) {
+            // First check if all required elements exist
+            const modal = document.getElementById('paymentModal');
+            const roomTypeInput = document.getElementById('roomType');
+            const amountInput = document.getElementById('amount');
+            const upiLinkElement = document.getElementById('upiLink');
+
+            if (!modal || !roomTypeInput || !amountInput || !upiLinkElement) {
+                console.error('Required elements not found');
+                alert('Sorry, there was a problem loading the payment form. Please try again.');
+                return;
+            }
+
+            try {
+                // Set values with error checking
+                roomTypeInput.value = roomType;
+                amountInput.value = `₹${amount}`;
+                
+                // Generate UPI link
+                const upiID = "tarni5@okhdfcbank";
+                const name = "SerenityResort";
+                const currency = "INR";
+                const upiLink = `upi://pay?pa=${upiID}&pn=${name}&am=${amount}&cu=${currency}`;
+                
+                upiLinkElement.href = upiLink;
+                modal.style.display = 'block';
+            } catch (error) {
+                console.error('Error in showPaymentModal:', error);
+                alert('An error occurred while processing your request. Please try again.');
+            }
+        }
+
+        function closePaymentModal() {
+            const modal = document.getElementById('paymentModal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        async function handlePaymentSubmit(event) {
+            event.preventDefault();
+            
+            const customerNameInput = document.getElementById('customerName');
+            const roomTypeInput = document.getElementById('roomType');
+            const amountInput = document.getElementById('amount');
+            const transactionIdInput = document.getElementById('upiTransactionId');
+
+            if (!customerNameInput || !roomTypeInput || !amountInput || !transactionIdInput) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            const paymentData = {
+                customerName: customerNameInput.value,
+                roomType: roomTypeInput.value,
+                amount: amountInput.value.replace('₹', ''),
+                transactionId: transactionIdInput.value
+            };
+
+            try {
+                const response = await fetch('http://localhost:3000/api/payments', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(paymentData)
+                });
+
+                if (!response.ok) throw new Error('Payment submission failed');
+
+                const result = await response.json();
+                alert('Payment recorded successfully!');
+                closePaymentModal();
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Failed to record payment. Please try again.');
+            }
+        }
+
+        // Make sure this code runs after the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update the room card buttons
+            const roomButtons = document.querySelectorAll('.room-buttons');
+            roomButtons.forEach(buttonContainer => {
+                const payButton = buttonContainer.querySelector('.btn-pay');
+                if (payButton) {
+                    const roomCard = buttonContainer.closest('.room-card');
+                    if (roomCard) {
+                        const roomTypeElement = roomCard.querySelector('.room-type');
+                        const priceElement = roomCard.querySelector('.price');
+                        if (roomTypeElement && priceElement) {
+                            const roomType = roomTypeElement.textContent;
+                            const price = priceElement.textContent.replace('₹', '');
+                            payButton.onclick = () => showPaymentModal(roomType, price);
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
